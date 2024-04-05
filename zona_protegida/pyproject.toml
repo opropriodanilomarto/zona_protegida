@@ -7,8 +7,31 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
+django = "^5.0.4"
+python-decouple = "^3.8"
+dj-database-url = "^2.1.0"
 
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.7.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+fix = true
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+extend-select = ["E501"]
+
+[tool.ruff.format]
+docstring-code-line-length = 120
+indent-style = "space"
+quote-style = "double"
+skip-magic-trailing-comma = true
+
+[tool.ruff.lint.isort]
+force-single-line = true
