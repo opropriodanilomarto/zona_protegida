@@ -14,25 +14,37 @@ Installation
 ------------
 
 1. Clone this repository:
-   ```
-   git clone https://github.com/DaniloMartoDeCarvalho/zona_protegida.git
-   ```
+
+.. code-block::
+
+    git clone https://github.com/DaniloMartoDeCarvalho/zona_protegida.git
+
 2. Navigate to the project directory:
-   ```
-   cd zona_protegida
-   ```
+
+.. code-block::
+
+    cd zona_protegida    
+   
 3. Install necessary dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
+
+.. code-block::
+
+    pip install -r requirements/base.txt
+    cp zona_progida
+    npm i
+
 4. Run Django migrations:
-   ```
-   python manage.py migrate
-   ```
+
+.. code-block::
+
+    python manage.py migrate
+
 5. Start the development server:
-   ```
-   python manage.py runserver
-   ```
+
+.. code-block::
+
+    python manage.py runserver
+
 6. Access the system at `http://localhost:8000 <http://localhost:8000>`_
 
 Contribution
@@ -49,4 +61,4 @@ Contributions are welcome! To contribute to Zona Protegida, follow these steps:
 License
 -------
 
-This project is licensed under the MIT License. See the LICENSE file for more information.
+This project is licensed under `the MIT License <https://github.com/DaniloMartoDeCarvalho/zona_protegida?tab=MIT-1-ov-file#readme>`_. See the LICENSE file for more information.
