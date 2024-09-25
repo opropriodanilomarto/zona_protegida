@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}
+    List Services / {{ service|capfirst }}
+{% endblock title %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item active" aria-current="page">{{ service|capfirst }}</li>
+{% endblock breadcrumb %}

@@ -1,4 +1,4 @@
-{% load i18n static %}<!DOCTYPE html>
+{% load i18n static cache %}<!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,11 +7,13 @@
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>{% block title %}{% endblock title %} / Zona Protegida</title>
+  {% cache 500 static_files %}
   <link rel="shortcut icon" href="{% static "img/favicon.ico" %}" type="image/x-icon">
   <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.css' %}">
   <link rel="stylesheet" href="{% static 'bootstrap-icons/font/bootstrap-icons.css' %}">
   <script defer src="{% static '@popperjs/core/dist/umd/popper.js' %}"></script>
   <script defer src="{% static 'bootstrap/dist/js/bootstrap.js' %}"></script>
+  {% endcache 500 static_files %}
 </head>
 
 <body class="bg-secondary-subtle">
@@ -19,28 +21,71 @@
   <header class="py-2 mb-3">
     <div class="container-xxl">
       <div class="d-flex align-items-center justify-content-between">
+        <button
+          class="d-lg-none btn btn-outline-secondary"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasNavMenu"
+          aria-controls="offcanvasNavMenu"
+        >
+          <i class="bi bi-list"></i>
+        </button>
         <a href="{% url "index" %}">
-          <img src="{% static "img/branch-zona-protegida.svg" %}" alt="branch" class="img-fluid" width="48" height="100">
+          {% cache 500 brand %}
+          {% include "brand.html" with width="48" height="100"%}
+          {% endcache brand %}
         </a>
+        <section class="d-none d-lg-block">
+          {% include "navmenu.html" %}
+        </section>
+        <section>
+          <div class="dropdown">
+            <button
+              class="btn btn-outline-secondary border-0 dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i class="bi bi-person"></i>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Perfil</a></li>
+              <li><a class="dropdown-item" href="#">Preference</a></li>
+              <li><a class="dropdown-item" href="#">Logout</a></li>
+            </ul>
+          </div>
+        </section>
       </div>
     </div>
   </header>
   <div class="d-none d-lg-block mb-3">
     <div class="container-xxl">
-      <nav aria-label="breadcrumb">
-        {% if page %}
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#"><i class="bi bi-house"></i></a></li>
-          {% block breadcrumb %}{% endblock breadcrumb %}
-        </ol>
-        {% else %}
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item active" aria-current="page"><i-bi class="bi-house"></i-bi></li>
-        </ol>
-        {% endif %}
-      </nav>
+      <div class="d-flex align-items-center justify-content-between">
+        <nav aria-label="breadcrumb">
+          {% if service %}
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url "index" %}"><i class="bi bi-house"></i></a></li>
+            {% block breadcrumb %}{% endblock breadcrumb %}
+          </ol>
+          {% else %}
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-house"></i></li>
+          </ol>
+          {% endif %}
+        </nav>
+        <p>{{ request.user.username|default:"anonymous"}}</p>
+      </div>
     </div>
   </div>
+  <aside class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavMenu" aria-labelledby="offcanvasNavMenuLabel">
+    <header class="offcanvas-header">
+      {% include "brand.html" with width="48" height="100"%}
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </header>
+    <main class="offcanvas-body h-100">
+      {% include "navmenu.html" %}
+    </main>
+  </aside>
   {% endblock navbar %}
   <main class="container-xxl">
     {% block content %}

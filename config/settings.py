@@ -12,6 +12,14 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
 CSRF_COOKIE_HTTPONLY = True
 
+# CACHE
+# ---------------------------------------------------------------------------------------------------------------------
+CACHE = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    }
+}
+
 # DEBUG
 # ---------------------------------------------------------------------------------------------------------------------
 DEBUG = config("DEBUG", cast=bool)

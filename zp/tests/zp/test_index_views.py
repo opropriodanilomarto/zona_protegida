@@ -1,8 +1,8 @@
-from django.test import SimpleTestCase
+from django.test import TestCase
 from django.urls import reverse
 
 
-class TestGetRequestToRootPath(SimpleTestCase):
+class TestGetRequestToRootPath(TestCase):
     def test_status_code_is_200(self) -> None:
         r = self.client.get(reverse("index"))
         self.assertEqual(r.status_code, 200)
