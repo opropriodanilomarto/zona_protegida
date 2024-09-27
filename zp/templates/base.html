@@ -18,21 +18,16 @@
 
 <body class="bg-secondary-subtle">
   {% block navbar %}
+  {% comment %} HEADER {% endcomment %}
   <header class="py-2 mb-3">
     <div class="container-xxl">
       <div class="d-flex align-items-center justify-content-between">
-        <button
-          class="d-lg-none btn btn-outline-secondary"
-          type="button"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasNavMenu"
-          aria-controls="offcanvasNavMenu"
-        >
+        <button class="d-lg-none btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavMenu" aria-controls="offcanvasNavMenu">
           <i class="bi bi-list"></i>
         </button>
-        <a href="{% url "index" %}">
+        <a href="{% url "zp:index" %}">
           {% cache 500 brand %}
-          {% include "brand.html" with width="48" height="100"%}
+          {% include "brand.html" with width="48" height="100" %}
           {% endcache brand %}
         </a>
         <section class="d-none d-lg-block">
@@ -40,31 +35,35 @@
         </section>
         <section>
           <div class="dropdown">
-            <button
-              class="btn btn-outline-secondary border-0 dropdown-toggle"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+            <button class="btn btn-outline-secondary border-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person"></i>
             </button>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="#">Perfil</a></li>
               <li><a class="dropdown-item" href="#">Preference</a></li>
-              <li><a class="dropdown-item" href="#">Logout</a></li>
+              <li>
+                <form action="{% url "zp:logout" %}" method="post">
+                  {% csrf_token %}
+                  <input type="submit" value="logout" class="dropdown-item">
+                </form>
+              </li>
             </ul>
           </div>
         </section>
       </div>
     </div>
   </header>
+  {% comment %} END HEADER {% endcomment %}
+
   <div class="d-none d-lg-block mb-3">
     <div class="container-xxl">
       <div class="d-flex align-items-center justify-content-between">
+
+        {% comment %} BREADCRUMB {% endcomment %}
         <nav aria-label="breadcrumb">
           {% if service %}
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url "index" %}"><i class="bi bi-house"></i></a></li>
+            <li class="breadcrumb-item"><a href="{% url "zp:index" %}"><i class="bi bi-house"></i></a></li>
             {% block breadcrumb %}{% endblock breadcrumb %}
           </ol>
           {% else %}
@@ -73,10 +72,14 @@
           </ol>
           {% endif %}
         </nav>
+        {% comment %} END BREADCRUMB {% endcomment %}
+
         <p>{{ request.user.username|default:"anonymous"}}</p>
       </div>
     </div>
   </div>
+
+  {% comment %} SIDEBAR {% endcomment %}
   <aside class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavMenu" aria-labelledby="offcanvasNavMenuLabel">
     <header class="offcanvas-header">
       {% include "brand.html" with width="48" height="100"%}
@@ -86,10 +89,11 @@
       {% include "navmenu.html" %}
     </main>
   </aside>
+  {% comment %} END SIDEBAR {% endcomment %}
+
   {% endblock navbar %}
   <main class="container-xxl">
-    {% block content %}
-    {% endblock content %}
+    {% block content %}{% endblock content %}
   </main>
 </body>
 </html>

@@ -1,23 +1,11 @@
 <nav class="nav h-100 gap-lg-3 flex-column flex-lg-row justify-content-evenly align-items-center">
-  <a
-    href="{% url "list_services" service="only-alarms" %}"
-    class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover {% if service == 'only alarms' %}fw-bold{% endif %}"
-    {% if service == 'only alarms' %}aria-current="page"{% endif %}
-  >
-    Only Alarms
-  </a>
-  <a
-    href="{% url "list_services" service="only-cameras" %}"
-    class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover {% if service == 'only cameras' %}fw-bold{% endif %}"
-    {% if service == 'only cameras' %}aria-current="page"{% endif %}
-  >
-    Only Cameras
-  </a>
-  <a
-    href="{% url "list_services" service="alarms-and-cameras" %}"
-    class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover {% if service == 'alarms and cameras' %}fw-bold{% endif %}"
-    {% if service == 'alarms and cameras' %}aria-current="page"{% endif %}
-  >
-    Alarms and Cameras
-  </a>
+  <a href="{% url "zp:service_list" service="only-alarms" %}"
+     class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover {% if service == 'only alarms' %}fw-bold{% endif %}"
+     {% if service == 'only alarms' %}aria-current="page"{% endif %}>Only Alarms</a>
+  <a href="{% url "zp:service_list" service="only-cameras" %}"
+     class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover {% if service == 'only cameras' %}fw-bold{% endif %}"
+     {% if service == 'only cameras' %}aria-current="page"{% endif %}>Only Cameras</a>
+  <a href="{% url "zp:service_list" service="alarms-and-cameras" %}"
+     class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover {% if service == 'alarms and cameras' %}fw-bold{% endif %}"
+     {% if service == 'alarms and cameras' %}aria-current="page"{% endif %}>Alarms and Cameras</a>
 </nav>

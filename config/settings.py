@@ -114,12 +114,15 @@ if not DEBUG:
 # MODELS
 # ---------------------------------------------------------------------------------------------------------------------
 INSTALLED_APPS = [
+    "zp.accounts",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "crispy_forms",
+    "crispy_bootstrap5",
     "zp",
 ]
 
@@ -159,9 +162,9 @@ ROOT_URLCONF = "config.urls"
 # AUTH
 # ---------------------------------------------------------------------------------------------------------------------
 AUTH_USER_MODEL = "auth.User"
-LOGIN_REDIRECT_URL = "/accounts/profile/"
-LOGIN_URL = "/accounts/login/"
-LOGOUT_REDIRECT_URL = "/accounts/login/"
+LOGIN_REDIRECT_URL = "zp:index"
+LOGIN_URL = "zp:login"
+LOGOUT_REDIRECT_URL = "zp:login"
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
