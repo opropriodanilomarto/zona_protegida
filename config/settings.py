@@ -1,4 +1,9 @@
-"""Django settings for config project."""
+"""
+Zona Protegida is an open source web application under the MIT license.
+
+Contributions to this module:
+    * Danilo Marto de Carvalho <carvalho.dm@proton.me>
+"""
 
 from pathlib import Path
 

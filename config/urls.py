@@ -1,4 +1,9 @@
-"""URL configuration for config project."""
+"""
+Zona Protegida is an open source web application under the MIT license.
+
+Contributions to this module:
+    * Danilo Marto de Carvalho <carvalho.dm@proton.me>
+"""
 
 from debug_toolbar.toolbar import debug_toolbar_urls
 from django.conf import settings
