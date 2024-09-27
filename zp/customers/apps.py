@@ -5,8 +5,9 @@ Contributions to this module:
     * Danilo Marto de Carvalho <carvalho.dm@proton.me>
 """
 
-from .generic import TemplateView
+from django.apps import AppConfig
 
 
-class Index(TemplateView):
-    template_name = "zp/index.html"
+class CustomersConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "zp.customers"

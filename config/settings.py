@@ -128,6 +128,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "widget_tweaks",
     "zp",
+    "zp.customers",
 ]
 
 if DEBUG:
@@ -167,8 +168,8 @@ ROOT_URLCONF = "config.urls"
 # ---------------------------------------------------------------------------------------------------------------------
 AUTH_USER_MODEL = "auth.User"
 LOGIN_REDIRECT_URL = "zp:index"
-LOGIN_URL = "zp:login"
-LOGOUT_REDIRECT_URL = "zp:login"
+LOGIN_URL = "zp:accounts:login"
+LOGOUT_REDIRECT_URL = "zp:accounts:login"
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},

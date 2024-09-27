@@ -8,8 +8,15 @@ Class-based views (CBV) from the django.views.generic package with the LoginRequ
 """
 
 from .base import TemplateView
+from .detail import DetailView
+from .edit import CreateView, UpdateView
+from .list import ListView
 
 
 __all__ = [
+    "CreateView",
+    "DetailView",
+    "ListView",
     "TemplateView",
+    "UpdateView",
 ]
