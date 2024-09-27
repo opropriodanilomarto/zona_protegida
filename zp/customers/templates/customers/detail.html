@@ -1,0 +1,55 @@
+{% extends "customers/_index.html" %}
+{% comment %}
+Zona Protegida is an open source web application under the MIT license.
+
+Contributions to this template:
+  * Danilo Marto de Carvalho <carvalho.dm@proton.me>
+{% endcomment %}
+
+{% block title %}
+{{ customer.name }} / {% if customer.type_service == "OA" %}alarm{% elif customer.type_service == "OC" %}camera{% else %}alarm and camera{% endif %} customers
+{% endblock title %}
+
+{% block breadcrumb %}
+{{ block.super }}
+<li class="breadcrumb-item">
+  <a href="{% url 'zp:customers:list' service=customer.type_service %}" class="text-dark fw-bold">
+    {% if customer.type_service == "OA" %}alarm{% elif customer.type_service == "OC" %}camera{% else %}alarm and camera{% endif %} customers
+  </a>
+</li>
+<li class="breadcrumb-item">
+  {{ customer.name }}
+</li>
+{% endblock breadcrumb %}
+
+{% block customer_page_navigation_tabs %}
+<a href="{% url 'zp:customers:list' service=customer.type_service %}" class="nav-link text-dark">
+  <i class="bi bi-list-ul"></i>
+</a>
+<a href="{% url 'zp:customers:list' service=customer.type_service %}" class="nav-link text-dark active" aria-current="tab">
+  <i class="bi bi-eye"></i>
+</a>
+<a href="#" class="nav-link text-dark">
+  <i class="bi bi-pencil"></i>
+</a>
+<a href="#" class="nav-link text-dark">
+  <i class="bi bi-trash"></i>
+</a>
+<a href="{% url 'zp:customers:create' service=customer.type_service %}" class="nav-link text-dark">
+  <i class="bi bi-plus"></i>
+</a>
+{% endblock customer_page_navigation_tabs %}
+
+{% block tab_content %}
+<form class="row row-gap-2">
+  <div class="col-12 col-md-6 col-lg-8">
+    <input type="text" placeholder="{{ customer.name }}" class="form-control" disabled>
+  </div>
+  <div class="col-6 col-md-3 col-lg-2">
+    <input type="text" placeholder="{% if customer.type_service == "OA" %}alarm{% elif customer.type_service == "OC" %}camera{% else %}alarm and camera{% endif %}" class="form-control" disabled>
+  </div>
+  <div class="col-6 col-md-3 col-lg-2">
+    <input type="text" placeholder="{% if customer.type_person == "NP" %}Natural Person{% else %}Legal Entity{% endif %}" class="form-control" disabled>
+  </div>
+</form>
+{% endblock tab_content %}

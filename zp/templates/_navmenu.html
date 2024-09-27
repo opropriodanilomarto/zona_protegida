@@ -1,0 +1,29 @@
+{% comment %}
+Zona Protegida is an open source web application under the MIT license.
+
+Contributions to this template:
+  * Danilo Marto de Carvalho <carvalho.dm@proton.me>
+{% endcomment %}
+<nav class="nav h-100 gap-lg-3 flex-column flex-lg-row justify-content-evenly align-items-center">
+  <a
+    href="{% url 'zp:customers:list' service='OA' %}"
+    class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover {% if service == 'OA' %}fw-bold{% endif %}"
+    {% if service == 'OA' %}aria-current="page"{% endif %}
+  >
+    Alarms
+  </a>
+  <a
+    href="{% url 'zp:customers:list' service='OC' %}"
+    class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover {% if service == 'OC' %}fw-bold{% endif %}"
+    {% if service == 'OC' %}aria-current="page"{% endif %}
+  >
+    Cameras
+  </a>
+  <a
+    href="{% url 'zp:customers:list' service='AC' %}"
+    class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover {% if service == 'AC' %}fw-bold{% endif %}"
+    {% if service == 'AC' %}aria-current="page"{% endif %}
+  >
+    Alarms and Cameras
+  </a>
+</nav>

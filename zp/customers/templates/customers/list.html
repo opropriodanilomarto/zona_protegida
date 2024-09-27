@@ -1,0 +1,75 @@
+{% extends "customers/_index.html" %}
+{% comment %}
+Zona Protegida is an open source web application under the MIT license.
+
+Contributions to this template:
+  * Danilo Marto de Carvalho <carvalho.dm@proton.me>
+{% endcomment %}
+
+{% block title %}
+{% if service == "OA" %}Alarm{% elif service == "OC" %}Camera{% else %}Alarm and camera{% endif %} customers
+{% endblock title %}
+
+{% block breadcrumb %}
+{{ block.super }}
+<li class="breadcrumb-item active" aria-current="page">
+  {% if service == "OA" %}Alarm{% elif service == "OC" %}Camera{% else %}Alarm and camera{% endif %} customers
+</li>
+{% endblock breadcrumb %}
+
+{% block search_form %}
+<section class="d-none d-lg-block">
+  <form action="" method="get" class="card card-body border-0 rounded-0 mb-3">
+    <div class="d-flex align-items-center gap-1">
+      <input type="text" class="form-control rounded-0 border-secondary-subtle">
+      <button type="submit" class="btn btn-outline-secondary border-secondary-subtle rounded-0">
+        <i class="bi bi-search"></i>
+      </button>
+      <button type="submit" class="btn btn-outline-secondary border-secondary-subtle rounded-0">
+        <i class="bi bi-funnel"></i>
+      </button>
+    </div>
+  </form>
+</section>
+{% endblock search_form %}
+
+{% block customer_page_navigation_tabs %}
+<a href="" class="nav-link text-dark active" aria-current="tab">
+  <i class="bi bi-list-ul"></i>
+</a>
+<a href="{% url "zp:customers:create" service=service %}" class="nav-link text-dark">
+  <i class="bi bi-plus"></i>
+</a>
+{% endblock customer_page_navigation_tabs %}
+
+{% block tab_content %}
+<section class="table-responsive-lg">
+  <table class="table table-striped table-hover align-middle">
+    <thead class="border-dark">
+      <tr>
+        <th scope="col">Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for customer in customers %}
+      <tr>
+        <td scope="col" class="text-nowrap">
+          <a
+            href="{{ customer.get_absolute_url }}"
+            class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover"
+          >
+            {{ customer.name }}
+          </a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td scope="col" class="text-nowrap">
+          No customers have been registered yet for the {% if service == "OA" %}alarm{% elif service == "OC" %}camera{% else %}alarm and camera{% endif %} service;
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock tab_content %}
