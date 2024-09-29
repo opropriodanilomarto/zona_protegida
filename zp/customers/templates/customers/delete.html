@@ -7,7 +7,7 @@ Contributions to this template:
 {% endcomment %}
 
 {% block title %}
-{{ customer.name }}
+Delete {{ customer.name }}
 {% endblock title %}
 
 {% block breadcrumb %}
@@ -15,8 +15,11 @@ Contributions to this template:
 <li class="breadcrumb-item">
   {% if customer.type_service == "OA" %}Alarm{% elif customer.type_service == "OC" %}Camera{% else %}Alarm and camera{% endif %}
 </li>
-<li class="breadcrumb-item active" aria-current="page">
+<li class="breadcrumb-item">
   {{ customer.name }}
+</li>
+<li class="breadcrumb-item active" aria-current="page">
+  Delete
 </li>
 {% endblock breadcrumb %}
 
@@ -36,13 +39,21 @@ Contributions to this template:
 <a href="{{ customer.get_absolute_url_to_update }}" class="btn btn-outline-warning border-warning-subtle">
   <i class="bi bi-pencil"></i>
 </a>
+<a href="{{ customer.get_absolute_url }}" class="btn btn-outline-primary border-primary-subtle">
+  <i class="bi bi-eye"></i>
+</a>
 <a href="{% url 'zp:customers:create_by_service' service=customer.type_service %}" class="btn btn-outline-success border-success-subtle">
   <i class="bi bi-plus"></i>
 </a>
 {% endblock buttons %}
 
 {% block tab_content %}
-<form>
+<form action="{{ request.path }}" method="post">
+  {% csrf_token %}
+  <section class="alert alert-danger">
+    <p class="fw-bold">Are you sure you want to delete {{ customer.name }}?</p>
+    <p>This customer will be marked as deleted and their data will not be editable, but will still be available for queries.</p>
+  </section>
   <h3 class="fs-6 text-secondary">General info</h3>
   <section class="row row-gap-2 mb-3">
     <div class="col-12 col-md-6 col-lg-8">
@@ -68,6 +79,9 @@ Contributions to this template:
   <section class="row row-gap-2 mb-3">
   </section>
   {% endif %}
-  <textarea placeholder="{{ customer.note }}" class="form-control border-secondary-subtle" disabled></textarea>
+  <div class="mb-3">
+    <textarea placeholder="{{ customer.note }}" class="form-control border-secondary-subtle" disabled></textarea>
+  </div>
+  <button type="submit" class="btn btn-outline-danger"><i class="bi bi-trash"></i> Delete</button>
 </form>
 {% endblock tab_content %}

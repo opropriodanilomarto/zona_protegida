@@ -33,7 +33,7 @@ Project base template
             </button>
             <a href="{% url "zp:index" %}">
               {% cache 500 brand %}
-              <img src="{% static "img/branch-zona-protegida.svg" %}" alt="brand" class="img-fluid" width="48" height="100" />
+              <img src="{% static "img/branch-zona-protegida.svg" %}" alt="brand" class="img-fluid" width="28" height="100" />
               {% endcache brand %}
             </a>
           </section>
@@ -59,7 +59,18 @@ Project base template
       </div>
     </header>
     {% comment %}Global Header End{% endcomment %}
-    <div class="d-none d-lg-block mb-3">
+    {% comment %}Sidebar{% endcomment %}
+    <aside class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavMenu" aria-labelledby="offcanvasNavMenuLabel">
+      <header class="offcanvas-header">
+        <img src="{% static "img/branch-zona-protegida.svg" %}" alt="brand" class="img-fluid" width="48" height="100" />
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </header>
+      <main class="offcanvas-body h-100">
+        {% include "_navmenu.html" %}
+      </main>
+    </aside>
+    {% comment %}Sidebar End{% endcomment %}
+    <section class="d-none d-lg-block mb-3">
       <div class="container-xxl">
         <div class="d-flex align-items-center justify-content-between">
           {% comment %}Breadcrumb{% endcomment %}
@@ -77,18 +88,7 @@ Project base template
           <p>{{ request.user.username }}</p>
         </div>
       </div>
-    </div>
-    {% comment %}Sidebar{% endcomment %}
-    <aside class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavMenu" aria-labelledby="offcanvasNavMenuLabel">
-      <header class="offcanvas-header">
-        <img src="{% static "img/branch-zona-protegida.svg" %}" alt="brand" class="img-fluid" width="48" height="100" />
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </header>
-      <main class="offcanvas-body h-100">
-        {% include "_navmenu.html" %}
-      </main>
-    </aside>
-    {% comment %}Sidebar End{% endcomment %}
+    </section>
     {% endblock navbar %}
     <main class="container-xxl">
       {% block content %}

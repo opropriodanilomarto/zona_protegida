@@ -13,6 +13,6 @@ app_name = "zp"
 
 urlpatterns = [
     path("", views.Index.as_view(), name="index"),
-    path("services/<slug:service>/customers/", include("zp.customers.urls", namespace="customers")),
+    path("customers/", include("zp.customers.urls", namespace="customers")),
     path("accounts/", include("zp.accounts.urls", namespace="accounts")),
 ]

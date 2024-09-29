@@ -9,7 +9,20 @@ from django import forms
 from .models import Person
 
 
-class PersonForm(forms.ModelForm):
+class CreatePersonForm(forms.ModelForm):
+    class Meta:
+        model = Person
+        fields = ("name", "type_person", "type_service")
+
+
+class UpdatePersonForm(forms.ModelForm):
     class Meta:
         model = Person
         fields = ("name", "type_person", "type_service", "note")
+
+
+class DeletePersonForm(forms.ModelForm):
+    class Meta:
+        model = Person
+        fields = ("name", "type_person", "type_service", "note")
+        # fields = ("deleted")

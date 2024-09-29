@@ -1,0 +1,63 @@
+{% extends "customers/_index.html" %}
+{% comment %}
+Zona Protegida is an open source web application under the MIT license.
+
+Contributions to this template:
+  * Danilo Marto de Carvalho <carvalho.dm@proton.me>
+{% endcomment %}
+
+{% load widget_tweaks %}
+
+{% block title %}
+Create new customer
+{% endblock title %}
+
+{% block breadcrumb %}
+{{ block.super }}
+<li class="breadcrumb-item active" aria-current="page">
+  Create
+</li>
+{% endblock breadcrumb %}
+
+{% block label %}
+<button class="btn btn-outline-success border-success-subtle w-100" type="button">
+  Create new customer
+</button>
+{% endblock label %}
+
+{% block nav %}
+{% endblock nav %}
+
+{% block buttons %}
+{% if not service %}
+<a href="{% url "zp:customers:list" %}" class="btn btn-outline-secondary border-secondary-subtle">
+  <i class="bi bi-chevron-left"></i>
+</a>
+{% else %}
+<a href="{% url "zp:customers:list_by_service" service=service %}" class="btn btn-outline-secondary border-secondary-subtle">
+  <i class="bi bi-chevron-left"></i>
+</a>
+{% endif %}
+
+{% endblock buttons %}
+
+{% block tab_content %}
+<form action="{{ request.path }}" method="post" class="row row-gap-2">
+  <h3 class="fs-6 text-secondary">General info</h3>
+  {% csrf_token %}
+  <div class="col-12 col-lg">
+    {% render_field form.name class="form-control border-secondary-subtle" placeholder=form.name.label %}
+  </div>
+  <div class="col-12 col-sm-6 col-lg-3">
+    {% render_field form.type_service class="form-select border-secondary-subtle" %}
+  </div>
+  <div class="col-12 col-sm-6 col-lg-3">
+    {% render_field form.type_person class="form-select border-secondary-subtle" %}
+  </div>
+  <div class="mb-3">
+    <button class="btn btn-outline-success border-success-subtle">
+      <i class="bi bi-plus"></i> Customers
+    </button>
+  </div>
+</form>
+{% endblock tab_content %}

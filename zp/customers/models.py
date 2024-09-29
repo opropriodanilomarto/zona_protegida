@@ -41,6 +41,7 @@ class Person(TimeStampedModel):
     )
     address = models.ForeignKey("zp.Address", verbose_name=_("Adress"), on_delete=models.SET_NULL, null=True)
     query = models.TextField(_("query"))
+    deleted = models.BooleanField(_("Deleted"), default=False)
     note = models.TextField(_("Note"), blank=True)
 
     objects = PersonManager.from_queryset(PersonQuerySet)
@@ -58,22 +59,13 @@ class Person(TimeStampedModel):
         return str(self.name)
 
     def get_absolute_url(self) -> str:
-        return reverse(
-            "zp:customers:detail",
-            kwargs={
-                "service": self.type_service,
-                "customer": self.slug,
-            },
-        )
+        return reverse("zp:customers:detail", kwargs={"slug": self.slug})
 
     def get_absolute_url_to_update(self) -> str:
-        return reverse(
-            "zp:customers:update",
-            kwargs={
-                "service": self.type_service,
-                "customer": self.slug,
-            },
-        )
+        return reverse("zp:customers:update", kwargs={"slug": self.slug})
+
+    def get_absolute_url_to_delete(self) -> str:
+        return reverse("zp:customers:delete", kwargs={"slug": self.slug})
 
     def save(self, *args, **kwargs) -> Self:
         self.slug = slugify(self.name)

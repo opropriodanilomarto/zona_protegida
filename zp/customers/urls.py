@@ -12,9 +12,11 @@ from . import views
 app_name = "customers"
 
 urlpatterns = [
-    path("create/", views.CreateView.as_view(), name="create"),
     path("", views.ListView.as_view(), name="list"),
-    path("<slug:customer>/", views.DetailView.as_view(), name="detail"),
-    path("<slug:customer>/update/", views.UpdateView.as_view(), name="update"),
-    path("<slug:customer>/delete/", views.ListView.as_view(), name="delete"),
+    path("s/<slug:service>/", views.ListView.as_view(), name="list_by_service"),
+    path("create/", views.CreateView.as_view(), name="create"),
+    path("s/<slug:service>/create/", views.CreateView.as_view(), name="create_by_service"),
+    path("<slug:slug>/", views.DetailView.as_view(), name="detail"),
+    path("<slug:slug>/update/", views.UpdateView.as_view(), name="update"),
+    path("<slug:slug>/delete/", views.DeleteView.as_view(), name="delete"),
 ]
