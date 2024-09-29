@@ -1,4 +1,4 @@
-{% extends "customers/_index.html" %}
+{% extends "zp/customers/_index.html" %}
 {% comment %}
 Zona Protegida is an open source web application under the MIT license.
 
@@ -6,29 +6,24 @@ Contributions to this template:
   * Danilo Marto de Carvalho <carvalho.dm@proton.me>
 {% endcomment %}
 
-{% load widget_tweaks %}
-
 {% block title %}
-Update {{ customer.name }}
+Delete {{ customer.name }}
 {% endblock title %}
 
 {% block breadcrumb %}
 {{ block.super }}
 <li class="breadcrumb-item">
-  {% if customer.type_service == 'OA' %}Alarm{% elif customer.type_service == 'OC' %}Camera{% elif customer.type_service == 'AC' %}Alarm and camera{% endif %}
+  {% if customer.type_service == "OA" %}Alarm{% elif customer.type_service == "OC" %}Camera{% else %}Alarm and camera{% endif %}
 </li>
 <li class="breadcrumb-item">
   {{ customer.name }}
 </li>
 <li class="breadcrumb-item active" aria-current="page">
-  Update
+  Delete
 </li>
 {% endblock breadcrumb %}
 
 {% block label %}
-<button class="btn btn-outline-warning w-100" type="button">
-  Update {{ customer.name }}
-</button>
 {% endblock label %}
 
 {% block nav %}
@@ -38,8 +33,11 @@ Update {{ customer.name }}
 <a href="{% url "zp:customers:list_by_service" service=customer.type_service %}" class="btn btn-outline-secondary border-secondary-subtle">
   <i class="bi bi-chevron-left"></i>
 </a>
-<a href="#" class="btn btn-outline-danger border-danger-subtle">
+<a href="{{ customer.get_absolute_url_to_delete }}" class="btn btn-outline-danger border-danger-subtle">
   <i class="bi bi-trash"></i>
+</a>
+<a href="{{ customer.get_absolute_url_to_update }}" class="btn btn-outline-warning border-warning-subtle">
+  <i class="bi bi-pencil"></i>
 </a>
 <a href="{{ customer.get_absolute_url }}" class="btn btn-outline-primary border-primary-subtle">
   <i class="bi bi-eye"></i>
@@ -52,16 +50,20 @@ Update {{ customer.name }}
 {% block tab_content %}
 <form action="{{ request.path }}" method="post">
   {% csrf_token %}
+  <section class="alert alert-danger">
+    <p class="fw-bold">Are you sure you want to delete {{ customer.name }}?</p>
+    <p>This customer will be marked as deleted and their data will not be editable, but will still be available for queries.</p>
+  </section>
   <h3 class="fs-6 text-secondary">General info</h3>
   <section class="row row-gap-2 mb-3">
-    <div class="col-12 col-lg">
-      {% render_field form.name class="form-control border-secondary-subtle" placeholder=form.name.label %}
+    <div class="col-12 col-md-6 col-lg-8">
+      <input type="text" placeholder="{{ customer.name }}" class="form-control border-secondary-subtle" disabled>
     </div>
-    <div class="col-12 col-sm-6 col-lg-3">
-      {% render_field form.type_person class="form-select border-secondary-subtle" %}
+    <div class="col-6 col-md-3 col-lg-2">
+      <input type="text" placeholder="{% if customer.type_service == "OA" %}alarm{% elif customer.type_service == "OC" %}camera{% else %}alarm and camera{% endif %}" class="form-select border-secondary-subtle" disabled>
     </div>
-    <div class="col-12 col-sm-6 col-lg-3">
-      {% render_field form.type_service class="form-select border-secondary-subtle" %}
+    <div class="col-6 col-md-3 col-lg-2">
+      <input type="text" placeholder="{% if customer.type_person == "NP" %}Natural Person{% else %}Legal Entity{% endif %}" class="form-select border-secondary-subtle" disabled>
     </div>
   </section>
   <h3 class="fs-6 text-secondary">Address</h3>
@@ -78,10 +80,8 @@ Update {{ customer.name }}
   </section>
   {% endif %}
   <div class="mb-3">
-    {% render_field form.note class="form-control border-secondary-subtle" %}
+    <textarea placeholder="{{ customer.note }}" class="form-control border-secondary-subtle" disabled></textarea>
   </div>
-  <button type="submit" class="btn btn-outline-warning">
-    <i class="bi bi-pencil"></i> update
-  </button>
+  <button type="submit" class="btn btn-outline-danger"><i class="bi bi-trash"></i> Delete</button>
 </form>
 {% endblock tab_content %}

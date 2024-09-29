@@ -1,4 +1,4 @@
-{% extends "customers/_index.html" %}
+{% extends "zp/customers/_index.html" %}
 {% comment %}
 Zona Protegida is an open source web application under the MIT license.
 
@@ -7,7 +7,7 @@ Contributions to this template:
 {% endcomment %}
 
 {% block title %}
-{% if service == 'OA' %}Alarm customers{% elif service == 'OC' %}Camera customers{% elif service == 'AC' %}Alarm and camera customers{% else %}All customers{% endif %}
+{% if service == '0' %}Alarm customers{% elif service == '1' %}Camera customers{% elif service == '2' %}Alarm and camera customers{% else %}All customers{% endif %}
 {% endblock title %}
 
 {% block breadcrumb %}
@@ -18,7 +18,7 @@ Contributions to this template:
 </li>
 {% else %}
 <li class="breadcrumb-item active" aria-current="page">
-  {% if service == 'OA' %}Alarms{% elif service == 'OC' %}Cameras{% elif service == 'AC' %}Alarms and cameras{% endif %}
+  {% if service == '0' %}Alarms{% elif service == '1' %}Cameras{% elif service == '2' %}Alarms and cameras{% endif %}
 </li>
 {% endif %}
 {% endblock breadcrumb %}
@@ -42,13 +42,13 @@ Contributions to this template:
 {% block label %}
 <div class="dropdown">
   <button class="btn btn-outline-secondary border-secondary-subtle dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-    {% if service == 'OA' %}Alarm{% elif service == 'OC' %}Camera{% elif service == 'AC' %}Alarm and camera{% else %}All{% endif %}
+    {% if service == '0' %}Alarms{% elif service == '1' %}Cameras{% elif service == '2' %}Alarms and cameras{% else %}All{% endif %}
   </button>
   <ul class="dropdown-menu w-100">
     <li><a href="{% url "zp:customers:list" %}" class="dropdown-item">All</a></li>
-    <li><a href="{% url 'zp:customers:list_by_service' service='OA' %}" class="dropdown-item">Alarms</a></li>
-    <li><a href="{% url 'zp:customers:list_by_service' service='OC' %}" class="dropdown-item">Cameras</a></li>
-    <li><a href="{% url 'zp:customers:list_by_service' service='AC' %}" class="dropdown-item">Alarms and cameras</a></li>
+    <li><a href="{% url 'zp:customers:list_by_service' service='0' %}" class="dropdown-item">Alarms</a></li>
+    <li><a href="{% url 'zp:customers:list_by_service' service='1' %}" class="dropdown-item">Cameras</a></li>
+    <li><a href="{% url 'zp:customers:list_by_service' service='2' %}" class="dropdown-item">Alarms and cameras</a></li>
   </ul>
 </div>
 {% endblock label %}
@@ -56,9 +56,9 @@ Contributions to this template:
 {% block nav %}
 <nav class="nav nav-underline">
   <a href="{% url "zp:customers:list" %}" class="nav-link text-dark {% if not service %}active{% endif %}" {% if not service %}aria-current="tab"{% endif %}>All</a>
-  <a href="{% url 'zp:customers:list_by_service' service='OA' %}" class="nav-link text-dark {% if service == 'OA' %}active{% endif %}" {% if service == "OA" %}aria-current="tab"{% endif %}>Alarms</a>
-  <a href="{% url 'zp:customers:list_by_service' service='OC' %}" class="nav-link text-dark {% if service == 'OC' %}active{% endif %}" {% if service == "OC" %}aria-current="tab"{% endif %}>Cameras</a>
-  <a href="{% url 'zp:customers:list_by_service' service='AC' %}" class="nav-link text-dark {% if service == 'AC' %}active{% endif %}" {% if service == "AC" %}aria-current="tab"{% endif %}>Alarms and Cameras</a>
+  <a href="{% url 'zp:customers:list_by_service' service='0' %}" class="nav-link text-dark {% if service == '0' %}active{% endif %}" {% if service == "0" %}aria-current="tab"{% endif %}>Alarms</a>
+  <a href="{% url 'zp:customers:list_by_service' service='1' %}" class="nav-link text-dark {% if service == '1' %}active{% endif %}" {% if service == "1" %}aria-current="tab"{% endif %}>Cameras</a>
+  <a href="{% url 'zp:customers:list_by_service' service='2' %}" class="nav-link text-dark {% if service == '2' %}active{% endif %}" {% if service == "2" %}aria-current="tab"{% endif %}>Alarms and Cameras</a>
 </nav>
 {% endblock nav %}
 
@@ -71,15 +71,9 @@ Contributions to this template:
     <i class="bi bi-funnel"></i>
   </button>
 </div>
-{% if not service %}
 <a href="{% url "zp:customers:create" %}" class="btn btn-outline-success border-success-subtle">
   <i class="bi bi-plus"></i>
 </a>
-{% else %}
-<a href="{% url 'zp:customers:create_by_service' service=service %}" class="btn btn-outline-success border-success-subtle">
-  <i class="bi bi-plus"></i>
-</a>
-{% endif %}
 {% endblock buttons %}
 
 {% block tab_content %}
@@ -90,13 +84,13 @@ Contributions to this template:
       <tr>
         <td scope="col" class="card card-body border-0 rounded-0">
           <p><a href="{{ customer.get_absolute_url }}" class="link-body-emphasis link-offset-2 link-underline-opacity-25 link-underline-opacity-75-hover">{{ customer.name }}</a></p>
-          <p class="text-secondary">Rua CC-09, 806 - Senador Hélio Campos. Boa Vista - RR. 69318-040</p>
+          <p class="text-secondary">{{ customer.address }}</p>
         </td>
       </tr>
       {% empty %}
       <tr>
         <td scope="col" class="text-nowrap">
-          <p>No customers have been registered yet for the {% if service == "OA" %}alarm{% elif service == "OC" %}camera{% else %}alarm and camera{% endif %} service.</p>
+          <p>No customers have been registered yet for the {% if service == "0" %}alarm{% elif service == "1C" %}camera{% else %}alarm and camera{% endif %} service.</p>
         </td>
       </tr>
       {% endfor %}

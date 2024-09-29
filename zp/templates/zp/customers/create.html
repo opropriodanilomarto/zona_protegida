@@ -1,4 +1,4 @@
-{% extends "customers/_index.html" %}
+{% extends "zp/customers/_index.html" %}
 {% comment %}
 Zona Protegida is an open source web application under the MIT license.
 
@@ -45,14 +45,11 @@ Create new customer
 <form action="{{ request.path }}" method="post" class="row row-gap-2">
   <h3 class="fs-6 text-secondary">General info</h3>
   {% csrf_token %}
-  <div class="col-12 col-lg">
+  <div class="col-12 col-md">
     {% render_field form.name class="form-control border-secondary-subtle" placeholder=form.name.label %}
   </div>
-  <div class="col-12 col-sm-6 col-lg-3">
+  <div class="col-12 col-md-4 col-lg-3">
     {% render_field form.type_service class="form-select border-secondary-subtle" %}
-  </div>
-  <div class="col-12 col-sm-6 col-lg-3">
-    {% render_field form.type_person class="form-select border-secondary-subtle" %}
   </div>
   <div class="mb-3">
     <button class="btn btn-outline-success border-success-subtle">
