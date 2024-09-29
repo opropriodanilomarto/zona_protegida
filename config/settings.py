@@ -72,6 +72,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "auditlog.middleware.AuditlogMiddleware",
 ]
 
 if DEBUG:
@@ -127,6 +128,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "widget_tweaks",
+    "auditlog",
     "zp",
     "zp.customers",
 ]
@@ -135,6 +137,8 @@ if DEBUG:
     INSTALLED_APPS += [
         "debug_toolbar",
     ]
+
+AUDITLOG_INCLUDE_ALL_MODELS = True
 
 # SECURITY
 # ---------------------------------------------------------------------------------------------------------------------
