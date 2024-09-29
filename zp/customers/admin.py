@@ -11,7 +11,7 @@ from .models import Person
 
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
-    list_display = ("name", "type_person", "type_service", "employee")
+    list_display = ("name", "type_service", "employee")
     search_fields = ("query",)
     prepopulated_fields = {"slug": ["name"]}
-    list_filter = ("type_person", "type_service")
+    list_filter = ("type_service",)

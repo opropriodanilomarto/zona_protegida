@@ -12,17 +12,17 @@ from .models import Person
 class CreatePersonForm(forms.ModelForm):
     class Meta:
         model = Person
-        fields = ("name", "type_person", "type_service")
+        fields = ("name", "type_service")
 
 
 class UpdatePersonForm(forms.ModelForm):
     class Meta:
         model = Person
-        fields = ("name", "type_person", "type_service", "note")
+        fields = ("name", "type_service", "note")
 
 
 class DeletePersonForm(forms.ModelForm):
     class Meta:
         model = Person
-        fields = ("name", "type_person", "type_service", "note")
+        fields = ("name", "type_service", "note")
         # fields = ("deleted")
