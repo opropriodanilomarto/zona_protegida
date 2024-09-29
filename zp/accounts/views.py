@@ -10,9 +10,9 @@ Implementing the login and logout feature
 from django.contrib.auth import views
 
 
-class Login(views.LoginView):
-    pass
+class LoginView(views.LoginView):
+    template_name = "zp/accounts/login.html"
 
 
-class Logout(views.LogoutView):
+class LogoutView(views.LogoutView):
     pass
