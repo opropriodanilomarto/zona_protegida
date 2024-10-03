@@ -13,7 +13,7 @@ from django.urls import reverse_lazy
 from zp.forms import AddressForm
 
 from zp.models import Address
-from .forms import CreateNewCustomerForm, UpdateCustomerForm
+from .forms import CustomerForm
 from .models import Customer
 
 
@@ -40,7 +40,7 @@ def customer_detail(request: HttpRequest, slug: str) -> HttpResponse:
 @login_required
 def customer_create(request: HttpRequest) -> HttpResponse:
     template_name = "zp/customers/customer_create.html"
-    form = CreateNewCustomerForm(request.POST or None)
+    form = CustomerForm(request.POST or None)
 
     if request.method != "POST" or not form.is_valid():
         context = {"pg": "customers", "form": form}
@@ -58,7 +58,7 @@ def customer_create(request: HttpRequest) -> HttpResponse:
 def customer_update(request: HttpRequest, slug: str) -> HttpResponse:
     template_name = "zp/customers/customer_update.html"
     customer = get_object_or_404(Customer.objects.filter(deleted=False), slug=slug)
-    form = UpdateCustomerForm(request.POST or None, instance=customer)
+    form = CustomerForm(request.POST or None, instance=customer)
     address_form = AddressForm(request.POST or None, instance=customer.address)
 
     if request.method != "POST" or not form.is_valid() or not address_form.is_valid():

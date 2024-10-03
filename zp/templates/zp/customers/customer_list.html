@@ -1,57 +1,44 @@
-{% extends "zp/zp_base.html" %}
+{% extends "zp/customers/customer_base.html" %}
 
 {% block title %}
   Customers
 {% endblock title %}
-{% block zp_content %}
-  <section class="card card-body">
-    <header class="row mb-3 ms-2">
-      <nav class="col nav nav-underline">
-        <a href="{% url 'zp:customers:customer_list' %}"
-           class="nav-link text-capitalize text-secondary {% if not service_type %}active{% endif %}"
-           {% if not service_type %}aria-current="tab"{% endif %}>all</a>
-        <a href="{% url 'zp:customers:customer_list' service_type='alarms' %}"
-           class="nav-link text-capitalize text-secondary {% if service_type == 'alarms' %}active{% endif %}"
-           {% if service_type == 'alarms' %}aria-current="tab"{% endif %}>alarms</a>
-        <a href="{% url 'zp:customers:customer_list' service_type='cameras' %}"
-           class="nav-link text-capitalize text-secondary {% if service_type == 'cameras' %}active{% endif %}"
-           {% if service_type == 'cameras' %}aria-current="tab"{% endif %}>cameras</a>
-        <a href="{% url 'zp:customers:customer_list' service_type='alarms_and_cameras' %}"
-           class="nav-link text-capitalize text-secondary {% if service_type == 'alarms_and_cameras' %}active{% endif %}"
-           {% if service_type == 'alarms_and_cameras' %}aria-current="tab"{% endif %}>alarms and cameras</a>
-      </nav>
-      <nav class="col nav justify-content-end">
-        <a href="{% url 'zp:customers:customer_create' %}"
-           class="btn btn-outline-secondary border-secondary-subtle">
-          <i class="bi bi-plus"></i>
-        </a>
-      </nav>
-    </header>
-    <main>
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>Customer list</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for customer in customers %}
-            <tr>
-              <td>
-                <a href="{{ customer.get_absolute_url }}"
-                   class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ customer.name }}</a>
-                <span class="badge text-bg-secondary border-secondary-subtle">{{ customer.service_type }}</span>
-              </td>
-            </tr>
-          {% empty %}
-            <tr>
-              <td>
-                <p class="m-0">No customers have been registered yet</p>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </main>
-  </section>
-{% endblock zp_content %}
+
+{% block nav_link %}
+<a  href="{% url 'zp:customers:customer_list' %}"
+    class="nav-link text-capitalize {% if not service_type %}active{% endif %}"
+    {% if not service_type %}aria-current="tab"{% endif %}>all</a>
+<a  href="{% url 'zp:customers:customer_list' service_type='alarms' %}"
+    class="nav-link text-capitalize {% if service_type == 'alarms' %}active{% endif %}"
+    {% if service_type == 'alarms' %}aria-current="tab"{% endif %}>alarms</a>
+<a  href="{% url 'zp:customers:customer_list' service_type='cameras' %}"
+    class="nav-link text-capitalize {% if service_type == 'cameras' %}active{% endif %}"
+    {% if service_type == 'cameras' %}aria-current="tab"{% endif %}>cameras</a>
+<a  href="{% url 'zp:customers:customer_list' service_type='alarms_and_cameras' %}"
+    class="nav-link text-capitalize {% if service_type == 'alarms_and_cameras' %}active{% endif %}"
+    {% if service_type == 'alarms_and_cameras' %}aria-current="tab"{% endif %}>alarms and cameras</a>
+{% endblock nav_link %}
+
+{% block buttons %}
+<a  href="{% url 'zp:customers:customer_create' %}"
+    class="btn btn-outline-secondary border-secondary-subtle"><i class="bi bi-plus"></i></a>
+{% endblock buttons %}
+
+{% block customer_content %}
+<ul class="list-group list-group-flush">
+  {% for customer in customers %}
+  <li class="list-group-item d-flex justify-content-between align-items-start">
+    <div>
+      <p><a  href="{{ customer.get_absolute_url }}"
+            class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ customer.name }}</a></p>
+      <p class="text-secondary fst-italic">{{ customer.address|default_if_none:"- - -" }}</p>
+    </div>
+    <span class="badge text-bg-secondary rounded-pill">{{ customer.service_type }}</span>
+  </li>
+  {% empty %}
+  <li class="list-group-item d-flex justify-content-between align-items-start">
+    <p class="m-0">No customers have been registered yet</p>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock customer_content %}

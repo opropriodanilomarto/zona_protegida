@@ -1,11 +1,5 @@
 <nav class="nav nav-underline">
-  <a href="{% url 'zp:customers:customer_list' %}"
-     class="nav-link text-capitalize text-secondary {% if pg == 'customers' %}active{% endif %}"
-     {% if pg == 'customers' %}aria-current="page"{% endif %}>customers</a>
-  <a href=""
-     class="nav-link text-capitalize text-secondary {% if pg == 'maintenance' %}active{% endif %}"
-     {% if pg == 'maintenance' %}aria-current="page"{% endif %}>maintenance</a>
-  <a href=""
-     class="nav-link text-capitalize text-secondary {% if pg == 'reports' %}active{% endif %}"
-     {% if pg == 'reports' %}aria-current="page"{% endif %}>reports</a>
+  <a  href="{% url 'zp:customers:customer_list' %}"
+      class="nav-link text-capitalize {% if pg == 'customers' %}active{% endif %}"
+      {% if pg == 'customers' %}aria-current="page"{% endif %}>customers</a>
 </nav>

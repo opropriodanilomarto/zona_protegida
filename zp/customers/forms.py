@@ -9,13 +9,7 @@ from django import forms
 from .models import Customer
 
 
-class CreateNewCustomerForm(forms.ModelForm):
-    class Meta:
-        model = Customer
-        fields = ("name", "service_type")
-
-
-class UpdateCustomerForm(forms.ModelForm):
+class CustomerForm(forms.ModelForm):
     class Meta:
         model = Customer
         fields = ("name", "service_type", "note")

@@ -14,16 +14,14 @@
       / Zona Protegida
     </title>
     <link rel="shortcut icon" href="{% static "img/favicon.ico" %}" type="image/x-icon" />
-    <link rel="stylesheet"
-          href="{% static 'bootstrap/dist/css/bootstrap.css' %}" />
-    <link rel="stylesheet"
-          href="{% static 'bootstrap-icons/font/bootstrap-icons.css' %}" />
+    <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.css' %}" />
+    <link rel="stylesheet" href="{% static 'bootstrap-icons/font/bootstrap-icons.css' %}" />
     <link rel="stylesheet" href="{% static 'zp/css/zp.css' %}" />
     <script defer src="{% static '@popperjs/core/dist/umd/popper.js' %}"></script>
     <script defer src="{% static 'bootstrap/dist/js/bootstrap.js' %}"></script>
     <script defer src="{% static 'htmx.org/dist/htmx.js' %}"></script>
   </head>
-  <body class="">
+  <body>
     {% block body %}
     {% endblock body %}
   </body>

@@ -1,102 +1,163 @@
-{% extends "zp/zp_base.html" %}
+{% extends "zp/customers/customer_base.html" %}
 
 {% load widget_tweaks %}
 
 {% block title %}
   Update {{ customer.name }}
 {% endblock title %}
-{% block zp_content %}
-  <section class="card card-body mb-5">
-    <header class="row mb-3">
-      <secton class="col">
-      <h3 class="fs-4 text-secondary">Update {{ customer.name }}</h3>
-      </secton>
-      <nav class="col nav justify-content-end gap-1">
-        <a href="{% url 'zp:customers:customer_list' %}"
-           class="btn btn-outline-secondary border-secondary-subtle">
-          <i class="bi bi-list-ul"></i>
-        </a>
-        {% if customer %}
-          <a href="{{ customer.get_absolute_url_to_delete }}"
-             class="btn btn-outline-secondary border-secondary-subtle">
-            <i class="bi bi-trash"></i>
-          </a>
-          <a href="{{ customer.get_absolute_url }}"
-             class="btn btn-outline-secondary border-secondary-subtle">
-            <i class="bi bi-eye"></i>
-          </a>
-          <a href="{% url 'zp:customers:customer_create' %}"
-             class="btn btn-outline-secondary border-secondary-subtle">
-            <i class="bi bi-plus"></i>
-          </a>
-        {% endif %}
-      </nav>
-    </header>
-    <main>
-      <form action="{{ request.path }}" method="post">
-        {% csrf_token %}
-        <section class="card card-body mb-3">
-          <h6 class="text-secondary">General info</h6>
-          <section class="row">
-            <div class="mb-3 col-12 col-lg-9">
-              <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
-              {% render_field form.name class="form-control" placeholder=form.name.label %}
-              {% for error in form.name.errors %}<p class="text-danger">{{ error }}</p>{% endfor %}
-            </div>
-            <div class="mb-3 col-12 col-lg-3">
-              <label for="{{ form.service_type.id_for_label }}" class="form-label">{{ form.service_type.label }}</label>
-              {% render_field form.service_type class="form-select" placeholder=form.service_type.label %}
-            </div>
-          </section>
-        </section>
-        <section class="card card-body mb-3">
-          <h6 class="text-secondary">Address info</h6>
-          <section class="row">
-            <div class="mb-3 col-12 col-lg-8">
-              <label for="{{ address_form.street.id_for_label }}" class="form-label">{{ address_form.street.label }}</label>
-              {% render_field address_form.street class="form-control" placeholder=address_form.street.label %}
-            </div>
-            <div class="mb-3 col-12 col-lg-2">
-              <label for="{{ address_form.number.id_for_label }}" class="form-label">{{ address_form.number.label }}</label>
-              {% render_field address_form.number class="form-control" placeholder=address_form.number.label %}
-            </div>
-            <div class="mb-3 col-12 col-lg-2">
-              <label for="{{ address_form.complement.id_for_label }}" class="form-label">{{ address_form.complement.label }}</label>
-              {% render_field address_form.complement class="form-control" placeholder=address_form.complement.label %}
-            </div>
-            <div class="mb-3 col-12 col-lg-6">
-              <label for="{{ address_form.neighborhood.id_for_label }}" class="form-label">
-                {{ address_form.neighborhood.label }}
-              </label>
-              {% render_field address_form.neighborhood class="form-control" placeholder=address_form.neighborhood.label %}
-            </div>
-            <div class="mb-3 col-12 col-lg-2">
-              <label for="{{ address_form.city.id_for_label }}" class="form-label">{{ address_form.city.label }}</label>
-              {% render_field address_form.city class="form-control" placeholder=address_form.city.label %}
-            </div>
-            <div class="mb-3 col-12 col-lg-2">
-              <label for="{{ address_form.state.id_for_label }}" class="form-label">{{ address_form.state.label }}</label>
-              {% render_field address_form.state class="form-select" placeholder=address_form.state.label %}
-            </div>
-            <div class="mb-3 col-12 col-lg-2">
-              <label for="{{ address_form.country.id_for_label }}" class="form-label">{{ address_form.country.label }}</label>
-              {% render_field address_form.country class="form-control" placeholder=address_form.country.label %}
-            </div>
-            <div class="mb-3 col-12 col-lg-2">
-              <label for="{{ address_form.zip_code.id_for_label }}" class="form-label">{{ address_form.zip_code.label }}</label>
-              {% render_field address_form.zip_code class="form-control" placeholder=address_form.zip_code.label %}
-            </div>
-          </section>
-        </section>
-        <section class="mb-3">
-          <label for="{{ form.note.id_for_label }}" class="form-label">{{ form.note.label }}</label>
-          {% render_field form.note class="form-control" %}
-        </section>
-        <section class="text-center">
-          <button type="submit"
-                  class="btn btn-outline-secondary border-secondary-subtle">Update {{ customer.name }}</button>
-        </section>
-      </form>
-    </main>
+
+{% block card_border_color %}
+border-warning
+{% endblock card_border_color %}
+
+{% block nav_tabs %}
+<nav>
+  <div class="nav nav-underline" id="nav-tab" role="tablist">
+    <button class="nav-link text-warning active"
+            id="nav-general-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#nav-general"
+            type="button"
+            role="tab"
+            aria-controls="nav-general"
+            aria-selected="true">General</button>
+    <button class="nav-link text-warning"
+            id="nav-address-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#nav-address"
+            type="button"
+            role="tab"
+            aria-controls="nav-address"
+            aria-selected="false">Address</button>
+    <button class="nav-link"
+            id="nav-dvr-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#nav-dvr"
+            type="button"
+            role="tab"
+            aria-controls="nav-dvr"
+            aria-selected="false"
+            disabled>DVR</button>
+    <button class="nav-link"
+            id="nav-alarm-centers-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#nav-alarm-centers"
+            type="button"
+            role="tab"
+            aria-controls="nav-alarm-centers"
+            aria-selected="false"
+            disabled>Alarm Centers</button>
+  </div>
+</nav>
+{% endblock nav_tabs %}
+
+{% block buttons %}
+<a  href="{% url 'zp:customers:customer_list' service_type=customer.service_type %}"
+    class="btn btn-outline-secondary border-secondary-subtle"><i class="bi bi-list-ul"></i></a>
+<a  href="{{ customer.get_absolute_url_to_delete }}"
+    class="btn btn-outline-secondary border-secondary-subtle"><i class="bi bi-trash"></i></a>
+<a  href="{{ customer.get_absolute_url }}"
+    class="btn btn-outline-secondary border-secondary-subtle"><i class="bi bi-eye"></i></a>
+<a  href="{% url 'zp:customers:customer_create' %}"
+    class="btn btn-outline-secondary border-secondary-subtle"><i class="bi bi-plus"></i></a>
+{% endblock buttons %}
+
+{% block customer_content %}
+<form action="{{ request.path }}" method="post" class="tab-content" id="nav-tabContent">
+  {% csrf_token %}
+
+  <section  class="mb-3 tab-pane fade show active"
+            id="nav-general"
+            role="tabpanel"
+            aria-labelledby="nav-general-tab"
+            tabindex="0">
+
+    <div class="row">
+      <div class="mb-3 col-12 col-lg-9">
+        <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
+        {% render_field form.name class="form-control" %}
+      </div>
+
+      <div class="mb-3 col-12 col-lg-3">
+        <label for="{{ form.service_type.id_for_label }}" class="form-label">{{ form.service_type.label }}</label>
+        {% render_field form.service_type class="form-select" %}
+      </div>
+
+      <div class="col-12">
+        <label for="{{ form.note.id_for_label }}" class="form-label">{{ form.note.label }}</label>
+        {% render_field form.note class="form-control" %}
+      </div>
+    </div>
   </section>
-{% endblock zp_content %}
+
+  <section  class="mb-3 tab-pane fade"
+            id="nav-address"
+            role="tabpanel"
+            aria-labelledby="nav-address-tab"
+            tabindex="0">
+
+    <div class="row">
+      <div class="mb-3 col-12 col-lg-8">
+        <label for="{{ address_form.street.id_for_label }}" class="form-label">{{ address_form.street.label }}</label>
+        {% render_field address_form.street class="form-control" %}
+      </div>
+
+      <div class="mb-3 col-12 col-lg-2">
+        <label for="{{ address_form.number.id_for_label }}" class="form-label">{{ address_form.number.label }}</label>
+        {% render_field address_form.number class="form-control" %}
+      </div>
+
+      <div class="mb-3 col-12 col-lg-2">
+        <label for="{{ address_form.complement.id_for_label }}" class="form-label">{{ address_form.complement.label }}</label>
+        {% render_field address_form.complement class="form-control" %}
+      </div>
+
+      <div class="mb-3 col-12 col-lg-6">
+        <label for="{{ address_form.neighborhood.id_for_label }}" class="form-label">{{ address_form.neighborhood.label }}</label>
+        {% render_field address_form.neighborhood class="form-control" %}
+      </div>
+
+      <div class="mb-3 col-12 col-lg-2">
+        <label for="{{ address_form.city.id_for_label }}" class="form-label">{{ address_form.city.label }}</label>
+        {% render_field address_form.city class="form-control" %}
+      </div>
+
+      <div class="mb-3 col-12 col-lg-2">
+        <label for="{{ address_form.state.id_for_label }}" class="form-label">{{ address_form.state.label }}</label>
+        {% render_field address_form.state class="form-select" %}
+      </div>
+
+      <div class="mb-3 col-12 col-lg-2">
+        <label for="{{ address_form.country.id_for_label }}" class="form-label">{{ address_form.country.label }}</label>
+        {% render_field address_form.country class="form-control" %}
+      </div>
+
+      <div class="mb-3 col-12 col-lg-2">
+        <label for="{{ address_form.zip_code.id_for_label }}" class="form-label">{{ address_form.zip_code.label }}</label>
+        {% render_field address_form.zip_code class="form-control" %}
+      </div>
+    </div>
+  </section>
+
+  <section  class="mb-3 tab-pane fade"
+            id="nav-dvr"
+            role="tabpanel"
+            aria-labelledby="nav-dvr-tab"
+            tabindex="0">
+
+  </section>
+
+  <section  class="mb-3 tab-pane fade"
+            id="nav-alarm-centers"
+            role="tabpanel"
+            aria-labelledby="nav-alarm-centers-tab"
+            tabindex="0">
+
+  </section>
+
+  <section class="text-center">
+    <button type="submit"
+            class="btn btn-warning">Update {{ customer.name }}</button>
+  </section>
+</form>
+{% endblock customer_content %}

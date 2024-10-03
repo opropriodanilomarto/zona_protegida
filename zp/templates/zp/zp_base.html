@@ -3,37 +3,43 @@
 {% load static %}
 
 {% block body %}
-  <header class="py-2 mb-3">
-    <div class="container-xxl">
-      <div class="d-flex align-items-center justify-content-between">
-        <section class="d-lg-none">
-          <button type="button"
-                  class="btn btn-outline-secondary border-secondary-subtle">
-            <i class="bi bi-list"></i>
-          </button>
-        </section>
-        <section>
-          <a href="{% url 'zp:home' %}">
-            <img src="{% static 'img/branch-zona-protegida.svg' %}"
-                 alt="zp brand"
-                 class="img-fluid"
-                 width="34"
-                 heigth="100" />
-          </a>
-        </section>
-        <section>
-          {% include "zp/zp_navmenu.html" %}
-        </section>
-      </div>
+<header class="py-2 mb-3">
+  <div class="container-xxl">
+    <div class="d-flex align-items-center justify-content-between">
+
+      <section class="d-lg-none">
+        <button type="button"
+                class="btn btn-outline-secondary border-secondary-subtle">
+          <i class="bi bi-list"></i>
+        </button>
+      </section>
+
+      <section>
+        <a href="{% url 'zp:home' %}">
+          <img  src="{% static 'img/branch-zona-protegida.svg' %}"
+                alt="zp brand"
+                class="img-fluid"
+                width="34"
+                heigth="100" />
+        </a>
+      </section>
+
+      <section>
+        {% include "zp/zp_navmenu.html" %}
+      </section>
+
     </div>
-  </header>
-  <section class="container-xxl mb-3">
-    <div class="d-flex align-items-center">
-      <p class="m-0 text-secondary">{{ request.user.username }}</p>
-    </div>
-  </section>
-  <main class="container-xxl">
-    {% block zp_content %}
-    {% endblock zp_content %}
-  </main>
+  </div>
+</header>
+
+<section class="container-xxl mb-3">
+  <div class="d-flex align-items-center">
+    <p class="m-0 text-secondary">{{ request.user.username }}</p>
+  </div>
+</section>
+
+<main class="container-xxl">
+  {% block zp_content %}
+  {% endblock zp_content %}
+</main>
 {% endblock body %}

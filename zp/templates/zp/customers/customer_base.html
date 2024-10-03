@@ -1,0 +1,30 @@
+{% extends "zp/zp_base.html" %}
+
+{% block zp_content %}
+<section class="card card-body mb-5 {% block card_border_color %}{% endblock card_border_color %}">
+  <header class="row mb-3">
+
+    <section class="col">
+      {% block nav_tabs %}
+      <nav class="nav nav-underline">
+        {% block nav_link %}
+        {% endblock nav_link %}
+      </nav>
+      {% endblock nav_tabs %}
+    </section>
+
+    <section class="col">
+      <nav class="nav justify-content-end gap-1">
+        {% block buttons %}
+        {% endblock buttons %}
+      </nav>
+    </section>
+
+  </header>
+
+  <main>
+    {% block customer_content %}
+    {% endblock customer_content %}
+  </main>
+</section>
+{% endblock zp_content %}
