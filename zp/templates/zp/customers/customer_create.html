@@ -1,0 +1,55 @@
+{% extends "zp/zp_base.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}
+  Customer create
+{% endblock title %}
+{% block zp_content %}
+  <section class="card card-body">
+    <header class="row mb-3">
+      <secton class="col">
+      <h3 class="fs-4 text-secondary">Customer create</h3>
+      </secton>
+      <nav class="col nav justify-content-end gap-1">
+        <a href="{% url 'zp:customers:customer_list' %}"
+           class="btn btn-outline-secondary border-secondary-subtle">
+          <i class="bi bi-list-ul"></i>
+        </a>
+        {% if customer %}
+          <a href="{% url 'zp:customers:customer_create' %}"
+             class="btn btn-outline-secondary border-secondary-subtle">
+            <i class="bi bi-plus"></i>
+          </a>
+        {% endif %}
+      </nav>
+    </header>
+    <main>
+      <form action="{{ request.path }}" method="post">
+        {% csrf_token %}
+        <section class="card card-body mb-3">
+          <h6 class="text-secondary">General info</h6>
+          <section class="row">
+            <div class="mb-3 col-12 col-lg-9">
+              <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
+              {% render_field form.name class="form-control" placeholder=form.name.label %}
+              {% for error in form.name.errors %}<p class="text-danger">{{ error }}</p>{% endfor %}
+            </div>
+            <div class="mb-3 col-12 col-lg-3">
+              <label for="{{ form.service_type.id_for_label }}" class="form-label">{{ form.service_type.label }}</label>
+              {% render_field form.service_type class="form-select" placeholder=form.service_type.label %}
+            </div>
+          </section>
+        </section>
+        <section class="mb-3">
+          <label for="{{ form.note.id_for_label }}" class="form-label">{{ form.note.label }}</label>
+          {% render_field form.note class="form-control" %}
+        </section>
+        <section class="text-center">
+          <button type="submit"
+                  class="btn btn-outline-secondary border-secondary-subtle">Customer create</button>
+        </section>
+      </form>
+    </main>
+  </section>
+{% endblock zp_content %}

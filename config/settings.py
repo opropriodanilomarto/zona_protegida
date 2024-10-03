@@ -171,7 +171,7 @@ ROOT_URLCONF = "config.urls"
 # AUTH
 # ---------------------------------------------------------------------------------------------------------------------
 AUTH_USER_MODEL = "auth.User"
-LOGIN_REDIRECT_URL = "zp:index"
+LOGIN_REDIRECT_URL = "zp:home"
 LOGIN_URL = "zp:accounts:login"
 LOGOUT_REDIRECT_URL = "zp:accounts:login"
 AUTH_PASSWORD_VALIDATORS = [

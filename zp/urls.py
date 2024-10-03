@@ -12,7 +12,7 @@ from . import views
 app_name = "zp"
 
 urlpatterns = [
-    path("", views.Index.as_view(), name="index"),
+    path("", views.home, name="home"),
     path("customers/", include("zp.customers.urls", namespace="customers")),
     path("accounts/", include("zp.accounts.urls", namespace="accounts")),
 ]

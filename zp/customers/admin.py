@@ -6,12 +6,11 @@ Contributions to this module:
 """
 
 from django.contrib import admin
-from .models import Person
+from .models import Customer
 
 
-@admin.register(Person)
-class PersonAdmin(admin.ModelAdmin):
-    list_display = ("name", "type_service", "employee")
-    search_fields = ("query",)
+@admin.register(Customer)
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = ("name", "service_type", "employee")
     prepopulated_fields = {"slug": ["name"]}
-    list_filter = ("type_service",)
+    list_filter = ("service_type",)

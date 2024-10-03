@@ -14,38 +14,42 @@ from model_utils.models import TimeStampedModel
 from django.utils.text import slugify
 
 
-class PersonQuerySet(models.QuerySet):
+class CustomerQuerySet(models.QuerySet):
     pass
 
 
-class PersonManager(models.Manager):
+class CustomerManager(models.Manager):
     pass
 
 
-class Person(TimeStampedModel):
-    class TypeService(models.TextChoices):
-        ALARMS = "0", _("Only Alarms")
-        CAMERAS = "1", _("Only Cameras")
-        ALARMS_AND_CAMERAS = "2", _("Alarms and Cameras")
+class Customer(TimeStampedModel):
+    class ServiceChoices(models.TextChoices):
+        ALARMS = "alarms", _("Only Alarms")
+        CAMERAS = "cameras", _("Only Cameras")
+        ALARMS_AND_CAMERAS = "alarms_and_cameras", _("Alarms and Cameras")
 
     employee = models.ForeignKey("auth.User", verbose_name=_("Employee"), on_delete=models.PROTECT)
     name = models.CharField(_("Name"), max_length=255, unique=True)
     slug = models.SlugField(max_length=255, unique=True)
-    type_service = models.CharField(
-        _("Type of Service"), max_length=1, choices=TypeService, default=TypeService.ALARMS_AND_CAMERAS
+    service_type = models.CharField(
+        _("Service Type"), max_length=18, choices=ServiceChoices, default=ServiceChoices.ALARMS_AND_CAMERAS
     )
-    address = models.ForeignKey("zp.Address", verbose_name=_("Adress"), on_delete=models.SET_NULL, null=True)
+    address = models.ForeignKey(
+        "zp.Address",
+        verbose_name=_("Address"),
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="address",
+    )
     deleted = models.BooleanField(_("Deleted"), default=False)
     note = models.TextField(_("Note"), blank=True)
-    objects = PersonManager.from_queryset(PersonQuerySet)
+    objects = CustomerManager.from_queryset(CustomerQuerySet)
 
     class Meta:
         ordering = ("name",)
-        verbose_name = _("Person")
-        verbose_name_plural = _("People")
-        indexes = [
-            models.Index(fields=["name"]),
-        ]
+        verbose_name = _("Customer")
+        verbose_name_plural = _("Customers")
 
     def __str__(self) -> str:
         return str(self.name)
@@ -55,10 +59,10 @@ class Person(TimeStampedModel):
         return super().save(*args, **kwargs)
 
     def get_absolute_url(self) -> str:
-        return reverse("zp:customers:detail", kwargs={"slug": self.slug})
+        return reverse("zp:customers:customer_detail", kwargs={"slug": self.slug})
 
     def get_absolute_url_to_update(self) -> str:
-        return reverse("zp:customers:update", kwargs={"slug": self.slug})
+        return reverse("zp:customers:customer_update", kwargs={"slug": self.slug})
 
     def get_absolute_url_to_delete(self) -> str:
-        return reverse("zp:customers:delete", kwargs={"slug": self.slug})
+        return reverse("zp:customers:customer_delete", kwargs={"slug": self.slug})

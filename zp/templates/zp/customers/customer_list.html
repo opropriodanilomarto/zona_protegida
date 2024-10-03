@@ -1,0 +1,57 @@
+{% extends "zp/zp_base.html" %}
+
+{% block title %}
+  Customers
+{% endblock title %}
+{% block zp_content %}
+  <section class="card card-body">
+    <header class="row mb-3 ms-2">
+      <nav class="col nav nav-underline">
+        <a href="{% url 'zp:customers:customer_list' %}"
+           class="nav-link text-capitalize text-secondary {% if not service_type %}active{% endif %}"
+           {% if not service_type %}aria-current="tab"{% endif %}>all</a>
+        <a href="{% url 'zp:customers:customer_list' service_type='alarms' %}"
+           class="nav-link text-capitalize text-secondary {% if service_type == 'alarms' %}active{% endif %}"
+           {% if service_type == 'alarms' %}aria-current="tab"{% endif %}>alarms</a>
+        <a href="{% url 'zp:customers:customer_list' service_type='cameras' %}"
+           class="nav-link text-capitalize text-secondary {% if service_type == 'cameras' %}active{% endif %}"
+           {% if service_type == 'cameras' %}aria-current="tab"{% endif %}>cameras</a>
+        <a href="{% url 'zp:customers:customer_list' service_type='alarms_and_cameras' %}"
+           class="nav-link text-capitalize text-secondary {% if service_type == 'alarms_and_cameras' %}active{% endif %}"
+           {% if service_type == 'alarms_and_cameras' %}aria-current="tab"{% endif %}>alarms and cameras</a>
+      </nav>
+      <nav class="col nav justify-content-end">
+        <a href="{% url 'zp:customers:customer_create' %}"
+           class="btn btn-outline-secondary border-secondary-subtle">
+          <i class="bi bi-plus"></i>
+        </a>
+      </nav>
+    </header>
+    <main>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Customer list</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for customer in customers %}
+            <tr>
+              <td>
+                <a href="{{ customer.get_absolute_url }}"
+                   class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ customer.name }}</a>
+                <span class="badge text-bg-secondary border-secondary-subtle">{{ customer.service_type }}</span>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td>
+                <p class="m-0">No customers have been registered yet</p>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </main>
+  </section>
+{% endblock zp_content %}

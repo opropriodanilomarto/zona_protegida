@@ -1,0 +1,166 @@
+{% extends "zp/zp_base.html" %}
+
+{% block title %}
+  {% if delete %}Delete{% endif %}
+  {{ customer.name }}
+{% endblock title %}
+{% block zp_content %}
+  <section class="card card-body mb-5">
+    <header class="row mb-3">
+      <section class="col">
+        <h3 class="fs-4 text-secondary">
+          {% if delete %}Delete{% endif %}
+          {{ customer.name }}
+        </h3>
+      </section>
+      <nav class="col nav justify-content-end gap-1">
+        <a href="{% url 'zp:customers:customer_list' service_type=customer.service_type %}"
+           class="btn btn-outline-secondary border-secondary-subtle">
+          <i class="bi bi-list-ul"></i>
+        </a>
+        {% if delete %}
+          <a href="{{ customer.get_absolute_url }}"
+             class="btn btn-outline-secondary border-secondary-subtle">
+            <i class="bi bi-eye"></i>
+          </a>
+        {% else %}
+          <a href="{{ customer.get_absolute_url_to_delete }}"
+             class="btn btn-outline-secondary border-secondary-subtle">
+            <i class="bi bi-trash"></i>
+          </a>
+        {% endif %}
+        <a href="{{ customer.get_absolute_url_to_update }}"
+           class="btn btn-outline-secondary border-secondary-subtle">
+          <i class="bi bi-pencil"></i>
+        </a>
+        <a href="{% url 'zp:customers:customer_create' %}"
+           class="btn btn-outline-secondary border-secondary-subtle">
+          <i class="bi bi-plus"></i>
+        </a>
+      </nav>
+    </header>
+    <main>
+      <form {% if delete %}action="{{ request.path }}" method="post"{% endif %}
+            class="mb-5">
+        {% if delete %}
+          <section class="alert alert-secondary">
+            <p>Do you really want to delete this client?</p>
+            <p>
+              When deleting the client, it will be marked as deleted and cannot be edited again but will still be available for consultation.
+            </p>
+          </section>
+          {% csrf_token %}
+        {% endif %}
+        <section class="card card-body mb-3">
+          <h6 class="text-secondary">General info</h6>
+          <section class="row">
+            <div class="mb-3 col-12 col-lg-9">
+              <label for="Name" class="form-label">Name</label>
+              <input type="text"
+                     name="name"
+                     id="customer_name"
+                     value="{{ customer.name }}"
+                     class="form-control"
+                     disabled />
+            </div>
+            <div class="mb-3 col-12 col-lg-3">
+              <label for="service_type" class="form-label">Service Type</label>
+              <select name="service_type"
+                      id="customer_service_type"
+                      class="form-select"
+                      disabled>
+                <option select value="{{ customer.service_type }}">{{ customer.service_type }}</option>
+              </select>
+            </div>
+          </section>
+        </section>
+        <section class="card card-body mb-3">
+          <h6 class="text-secondary">Address info</h6>
+          <section class="row">
+            <div class="mb-3 col-12 col-lg-8">
+              <label for="street" class="form-label">Street</label>
+              <input type="text"
+                     name="street"
+                     id="address_street"
+                     value="{{ customer.address.street }}"
+                     class="form-control"
+                     disabled />
+            </div>
+            <div class="mb-3 col-12 col-lg-2">
+              <label for="number" class="form-label">Number</label>
+              <input type="text"
+                     name="number"
+                     id="address_number"
+                     value="{{ customer.address.number }}"
+                     class="form-control"
+                     disabled />
+            </div>
+            <div class="mb-3 col-12 col-lg-2">
+              <label for="complement" class="form-label">Complement</label>
+              <input type="text"
+                     name="complement"
+                     id="address_complement"
+                     value="{{ customer.address.complement }}"
+                     class="form-control"
+                     disabled />
+            </div>
+            <div class="mb-3 col-12 col-lg-6">
+              <label for="neighborhood" class="form-label">Neighborhood</label>
+              <input type="text"
+                     name="neighborhood"
+                     id="address_neighborhood"
+                     value="{{ customer.address.neighborhood }}"
+                     class="form-control"
+                     disabled />
+            </div>
+            <div class="mb-3 col-12 col-lg-2">
+              <label for="city" class="form-label">City</label>
+              <input type="text"
+                     name="city"
+                     id="address_city"
+                     value="{{ customer.address.city }}"
+                     class="form-control"
+                     disabled />
+            </div>
+            <div class="mb-3 col-12 col-lg-2">
+              <label for="state" class="form-label">State</label>
+              <select name="state" id="address_state" class="form-select" disabled>
+                <option select value="{{ customer.address.state }}">{{ customer.address.state }}</option>
+              </select>
+            </div>
+            <div class="mb-3 col-12 col-lg-2">
+              <label for="country" class="form-label">Country</label>
+              <input type="text"
+                     name="country"
+                     id="address_country"
+                     value="{{ customer.address.country }}"
+                     class="form-control"
+                     disabled />
+            </div>
+            <div class="mb-3 col-12 col-lg-2">
+              <label for="zip_code" class="form-label">Zip code</label>
+              <input type="text"
+                     name="zip_code"
+                     id="address_zip_code"
+                     value="{{ customer.address.zip_code }}"
+                     class="form-control"
+                     disabled />
+            </div>
+          </section>
+        </section>
+        <section class="mb-3">
+          <label for="note" class="form-label">Note</label>
+          <textarea name="note" id="customer_note" class="form-control" rows="20" disabled>
+            {{ customer.note }}
+          </textarea>
+        </section>
+        {% if delete %}
+          <section class="text-center">
+            <button type="submit"
+                    class="btn btn-outline-secondary border-secondary-subtle">Delete {{ customer.name }}</button>
+          </section>
+        {% endif %}
+      </form>
+    </main>
+  </section>
+{% endblock zp_content %}

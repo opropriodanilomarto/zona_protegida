@@ -5,65 +5,81 @@ Contributions to this module:
     * Danilo Marto de Carvalho <carvalho.dm@proton.me>
 """
 
-from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 
-from zp.views.generic import ListView, CreateView, UpdateView, DetailView
+from zp.forms import AddressForm
 
-from .models import Person, PersonQuerySet
-from .forms import CreatePersonForm, UpdatePersonForm, DeletePersonForm
-from .mixins import CustomerContextMixin, ServiceMixin
-
-
-class CreateView(CreateView, CustomerContextMixin, ServiceMixin):
-    template_name = "zp/customers/create.html"
-    form_class = CreatePersonForm
-
-    def get_success_url(self) -> str:
-        return self.object.get_absolute_url_to_update()
-
-    def form_valid(self, form) -> HttpResponse:
-        self.object = form.save(commit=False)
-        self.object.employee = self.request.user
-        self.object.save()
-        return HttpResponseRedirect(self.get_success_url())
+from zp.models import Address
+from .forms import CreateNewCustomerForm, UpdateCustomerForm
+from .models import Customer
 
 
-class ListView(ListView, CustomerContextMixin, ServiceMixin):
-    template_name = "zp/customers/list.html"
-    queryset = Person.objects.all().filter(deleted=False)
-    context_object_name = "customers"
+@login_required
+def customer_list(request: HttpRequest, service_type: str | None = None) -> HttpResponse:
+    template_name = "zp/customers/customer_list.html"
+    customers = Customer.objects.filter(deleted=False)
 
-    def get_queryset(self) -> PersonQuerySet:
-        service = self.get_service()
-        if service:
-            self.queryset = self.queryset.filter(type_service=service)
-        return self.queryset.only("name", "type_service")
+    if service_type:
+        customers = customers.filter(service_type=service_type)
 
-
-class DetailView(DetailView, CustomerContextMixin):
-    template_name = "zp/customers/detail.html"
-    queryset = Person.objects.all()
-    context_object_name = "customer"
+    context = {"pg": "customers", "service_type": service_type, "customers": customers}
+    return render(request, template_name, context)
 
 
-class UpdateView(UpdateView, CustomerContextMixin):
-    template_name = "zp/customers/update.html"
-    queryset = Person.objects.all()
-    context_object_name = "customer"
-    form_class = UpdatePersonForm
+@login_required
+def customer_detail(request: HttpRequest, slug: str) -> HttpResponse:
+    template_name = "zp/customers/customer_detail.html"
+    customer = get_object_or_404(Customer.objects.filter(deleted=False), slug=slug)
+    context = {"pg": "customers", "customer": customer}
+    return render(request, template_name, context)
 
 
-class DeleteView(UpdateView, CustomerContextMixin):
-    template_name = "zp/customers/delete.html"
-    queryset = Person.objects.all()
-    context_object_name = "customer"
-    form_class = DeletePersonForm
-    success_url = "zp:customers:list"
+@login_required
+def customer_create(request: HttpRequest) -> HttpResponse:
+    template_name = "zp/customers/customer_create.html"
+    form = CreateNewCustomerForm(request.POST or None)
 
-    def post(self, request, *args, **kwargs) -> HttpResponse:
-        super().post(request, *args, **kwargs)
-        self.object.deleted = True
-        self.object.save()
-        return redirect(reverse_lazy(self.success_url))
+    if request.method != "POST" or not form.is_valid():
+        context = {"pg": "customers", "form": form}
+        return render(request, template_name, context)
+
+    customer = form.save(commit=False)
+    customer.employee = request.user
+    customer.address = Address.objects.create()
+    customer.save()
+
+    return redirect(customer.get_absolute_url_to_update())
+
+
+@login_required
+def customer_update(request: HttpRequest, slug: str) -> HttpResponse:
+    template_name = "zp/customers/customer_update.html"
+    customer = get_object_or_404(Customer.objects.filter(deleted=False), slug=slug)
+    form = UpdateCustomerForm(request.POST or None, instance=customer)
+    address_form = AddressForm(request.POST or None, instance=customer.address)
+
+    if request.method != "POST" or not form.is_valid() or not address_form.is_valid():
+        context = {"pg": "customers", "form": form, "address_form": address_form, "customer": customer}
+        return render(request, template_name, context)
+
+    address_form.save()
+    customer = form.save()
+
+    return redirect(customer.get_absolute_url())
+
+
+@login_required
+def customer_delete(request: HttpRequest, slug: str) -> HttpResponse:
+    template_name = "zp/customers/customer_detail.html"
+    customer = get_object_or_404(Customer.objects.filter(deleted=False), slug=slug)
+
+    if request.method != "POST":
+        context = {"pg": "customers", "customer": customer, "delete": True}
+        return render(request, template_name, context)
+
+    customer.deleted = True
+    customer.save()
+    return redirect(reverse_lazy("zp:customers:customer_list", kwargs={"service_type": customer.service_type}))

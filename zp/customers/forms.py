@@ -6,23 +6,16 @@ Contributions to this module:
 """
 
 from django import forms
-from .models import Person
+from .models import Customer
 
 
-class CreatePersonForm(forms.ModelForm):
+class CreateNewCustomerForm(forms.ModelForm):
     class Meta:
-        model = Person
-        fields = ("name", "type_service")
+        model = Customer
+        fields = ("name", "service_type")
 
 
-class UpdatePersonForm(forms.ModelForm):
+class UpdateCustomerForm(forms.ModelForm):
     class Meta:
-        model = Person
-        fields = ("name", "type_service", "note")
-
-
-class DeletePersonForm(forms.ModelForm):
-    class Meta:
-        model = Person
-        fields = ("name", "type_service", "note")
-        # fields = ("deleted")
+        model = Customer
+        fields = ("name", "service_type", "note")
