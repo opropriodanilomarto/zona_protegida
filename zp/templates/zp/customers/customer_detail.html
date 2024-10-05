@@ -37,8 +37,7 @@ border-danger
             type="button"
             role="tab"
             aria-controls="nav-dvr"
-            aria-selected="false"
-            disabled>DVR</button>
+            aria-selected="false">DVR</button>
     <button class="nav-link"
             id="nav-alarm-centers-tab"
             data-bs-toggle="tab"
@@ -46,8 +45,7 @@ border-danger
             type="button"
             role="tab"
             aria-controls="nav-alarm-centers"
-            aria-selected="false"
-            disabled>Alarm Centers</button>
+            aria-selected="false">Alarm Centers</button>
   </div>
 </nav>
 {% endblock nav_tabs %}
@@ -204,6 +202,19 @@ border-danger
             aria-labelledby="nav-dvr-tab"
             tabindex="0">
 
+    {% for camera in customer.cameras.all %}
+    <div class="row">
+      <div class="mb-3 col-12">
+        <label for="camera.description" class="form-label">Description</label>
+        <input type="text"
+                name="alarm_description"
+                id="alarm_description"
+                value="{{ camera.description }}"
+                class="form-control"
+                disabled />
+      </div>
+    </div>
+    {% endfor %}
   </section>
 
   <section  class="mb-3 tab-pane fade"
@@ -212,6 +223,19 @@ border-danger
             aria-labelledby="nav-alarm-centers-tab"
             tabindex="0">
 
+    {% for alarm in customer.alarms.all %}
+    <div class="row">
+      <div class="mb-3 col-12">
+        <label for="alarm.description" class="form-label">Description</label>
+        <input type="text"
+                name="alarm_description"
+                id="alarm_description"
+                value="{{ alarm.description }}"
+                class="form-control"
+                disabled />
+      </div>
+    </div>
+    {% endfor %}
   </section>
 
   {% if delete %}

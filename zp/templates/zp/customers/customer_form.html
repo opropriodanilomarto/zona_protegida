@@ -3,17 +3,25 @@
 {% load widget_tweaks %}
 
 {% block title %}
-  Update {{ customer.name }}
+{% if customer %}
+Update {{ customer.name }}
+{% else %}
+Customer Create
+{% endif %}
 {% endblock title %}
 
 {% block card_border_color %}
+{% if customer %}
 border-warning
+{% else %}
+border-success
+{% endif %}
 {% endblock card_border_color %}
 
 {% block nav_tabs %}
 <nav>
   <div class="nav nav-underline" id="nav-tab" role="tablist">
-    <button class="nav-link text-warning active"
+    <button class="nav-link {% if customer %}text-warning{% else %}text-success{% endif %} active"
             id="nav-general-tab"
             data-bs-toggle="tab"
             data-bs-target="#nav-general"
@@ -21,7 +29,7 @@ border-warning
             role="tab"
             aria-controls="nav-general"
             aria-selected="true">General</button>
-    <button class="nav-link text-warning"
+    <button class="nav-link {% if customer %}text-warning{% else %}text-success{% endif %}"
             id="nav-address-tab"
             data-bs-toggle="tab"
             data-bs-target="#nav-address"
@@ -29,73 +37,65 @@ border-warning
             role="tab"
             aria-controls="nav-address"
             aria-selected="false">Address</button>
-    <button class="nav-link"
+    <button class="nav-link {% if customer %}text-warning{% else %}text-success{% endif %}"
             id="nav-dvr-tab"
             data-bs-toggle="tab"
             data-bs-target="#nav-dvr"
             type="button"
             role="tab"
             aria-controls="nav-dvr"
-            aria-selected="false"
-            disabled>DVR</button>
-    <button class="nav-link"
+            aria-selected="false">DVR</button>
+    <button class="nav-link {% if customer %}text-warning{% else %}text-success{% endif %}"
             id="nav-alarm-centers-tab"
             data-bs-toggle="tab"
             data-bs-target="#nav-alarm-centers"
             type="button"
             role="tab"
             aria-controls="nav-alarm-centers"
-            aria-selected="false"
-            disabled>Alarm Centers</button>
+            aria-selected="false">Alarm Centers</button>
   </div>
 </nav>
 {% endblock nav_tabs %}
 
 {% block buttons %}
-<a  href="{% url 'zp:customers:customer_list' service_type=customer.service_type %}"
+<a href="{% url 'zp:customers:customer_list' %}"
     class="btn btn-outline-secondary border-secondary-subtle"><i class="bi bi-list-ul"></i></a>
+{% if customer %}
 <a  href="{{ customer.get_absolute_url_to_delete }}"
     class="btn btn-outline-secondary border-secondary-subtle"><i class="bi bi-trash"></i></a>
 <a  href="{{ customer.get_absolute_url }}"
     class="btn btn-outline-secondary border-secondary-subtle"><i class="bi bi-eye"></i></a>
 <a  href="{% url 'zp:customers:customer_create' %}"
     class="btn btn-outline-secondary border-secondary-subtle"><i class="bi bi-plus"></i></a>
+{% endif %}
 {% endblock buttons %}
 
 {% block customer_content %}
 <form action="{{ request.path }}" method="post" class="tab-content" id="nav-tabContent">
   {% csrf_token %}
-
-  <section  class="mb-3 tab-pane fade show active"
-            id="nav-general"
-            role="tabpanel"
-            aria-labelledby="nav-general-tab"
-            tabindex="0">
-
+  <section class="mb-3 tab-pane fade show active" id="nav-general" role="tabpanel" aria-labelledby="nav-general-tab" tabindex="0">
     <div class="row">
       <div class="mb-3 col-12 col-lg-9">
-        <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
-        {% render_field form.name class="form-control" %}
+        <label for="{{ customer_form.name.id_for_label }}" class="form-label">{{ customer_form.name.label }}</label>
+        {% render_field customer_form.name class="form-control" %}
+        {{ customer_form.name.errors }}
       </div>
 
       <div class="mb-3 col-12 col-lg-3">
-        <label for="{{ form.service_type.id_for_label }}" class="form-label">{{ form.service_type.label }}</label>
-        {% render_field form.service_type class="form-select" %}
+        <label for="{{ customer_form.service_type.id_for_label }}" class="form-label">{{ customer_form.service_type.label }}</label>
+        {% render_field customer_form.service_type class="form-select" %}
+        {{ customer_form.service_type.errors }}
       </div>
 
       <div class="col-12">
-        <label for="{{ form.note.id_for_label }}" class="form-label">{{ form.note.label }}</label>
-        {% render_field form.note class="form-control" %}
+        <label for="{{ customer_form.note.id_for_label }}" class="form-label">{{ customer_form.note.label }}</label>
+        {% render_field customer_form.note class="form-control" %}
+        {{ customer_form.note.errors }}
       </div>
     </div>
   </section>
 
-  <section  class="mb-3 tab-pane fade"
-            id="nav-address"
-            role="tabpanel"
-            aria-labelledby="nav-address-tab"
-            tabindex="0">
-
+  <section class="mb-3 tab-pane fade" id="nav-address" role="tabpanel" aria-labelledby="nav-address-tab" tabindex="0">
     <div class="row">
       <div class="mb-3 col-12 col-lg-8">
         <label for="{{ address_form.street.id_for_label }}" class="form-label">{{ address_form.street.label }}</label>
@@ -113,7 +113,9 @@ border-warning
       </div>
 
       <div class="mb-3 col-12 col-lg-6">
-        <label for="{{ address_form.neighborhood.id_for_label }}" class="form-label">{{ address_form.neighborhood.label }}</label>
+        <label for="{{ address_form.neighborhood.id_for_label }}" class="form-label">
+          {{ address_form.neighborhood.label }}
+        </label>
         {% render_field address_form.neighborhood class="form-control" %}
       </div>
 
@@ -139,25 +141,40 @@ border-warning
     </div>
   </section>
 
-  <section  class="mb-3 tab-pane fade"
-            id="nav-dvr"
-            role="tabpanel"
-            aria-labelledby="nav-dvr-tab"
-            tabindex="0">
-
+  <section class="mb-3 tab-pane fade" id="nav-dvr" role="tabpanel" aria-labelledby="nav-dvr-tab" tabindex="0">
+    {{ camera_formset.management_form }}
+    {% for camera_form in camera_formset %}
+      <div class="row">
+        {{ camera_form.id }}
+        <div class="mb-3 col-12">
+          <label for="{{ camera_form.description.id_for_label }}" class="form-label">{{ camera_form.description.label }}</label>
+          {% render_field camera_form.description class="form-control" %}
+        </div>
+      {% endfor %}
+    </div>
   </section>
 
-  <section  class="mb-3 tab-pane fade"
-            id="nav-alarm-centers"
-            role="tabpanel"
-            aria-labelledby="nav-alarm-centers-tab"
-            tabindex="0">
-
+  <section class="mb-3 tab-pane fade" id="nav-alarm-centers" role="tabpanel" aria-labelledby="nav-alarm-centers-tab" tabindex="0">
+    {{ alarm_formset.management_form }}
+    {% for alarm_form in alarm_formset %}
+      <div class="row">
+        {{ alarm_form.id }}
+        <div class="mb-3 col-12">
+          <label for="{{ alarm_form.description.id_for_label }}" class="form-label">{{ alarm_form.description.label }}</label>
+          {% render_field alarm_form.description class="form-control" %}
+        </div>
+      {% endfor %}
+    </div>
   </section>
 
   <section class="text-center">
-    <button type="submit"
-            class="btn btn-warning">Update {{ customer.name }}</button>
+    <button type="submit" class="btn {% if customer %}btn-warning{% else %}btn-success{% endif %}">
+      {% if customer %}
+      Update {{ customer.name }}
+      {% else %}
+      Customer Create
+      {% endif %}
+    </button>
   </section>
 </form>
 {% endblock customer_content %}

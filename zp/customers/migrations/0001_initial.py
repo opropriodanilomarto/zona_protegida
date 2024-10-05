@@ -37,11 +37,11 @@ class Migration(migrations.Migration):
                     "service_type",
                     models.CharField(
                         choices=[
-                            ("ALARMS", "Only Alarms"),
-                            ("CAMERAS", "Only Cameras"),
-                            ("ALARMS_AND_CAMERAS", "Alarms and Cameras"),
+                            ("alarms", "Only Alarms"),
+                            ("cameras", "Only Cameras"),
+                            ("alarms_and_cameras", "Alarms and Cameras"),
                         ],
-                        default="ALARMS_AND_CAMERAS",
+                        default="alarms_and_cameras",
                         max_length=18,
                         verbose_name="Service Type",
                     ),

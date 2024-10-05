@@ -6,7 +6,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("customers", "0002_alter_customer_service_type"),
+        ("customers", "0001_initial"),
         ("zp", "0001_initial"),
     ]
 
@@ -22,19 +22,5 @@ class Migration(migrations.Migration):
                 to="zp.address",
                 verbose_name="Address",
             ),
-        ),
-        migrations.AlterField(
-            model_name="customer",
-            name="service_type",
-            field=models.CharField(
-                choices=[
-                    ("alarms", "Only Alarms"),
-                    ("cameras", "Only Cameras"),
-                    ("alarms_and_cameras", "Alarms and Cameras"),
-                ],
-                default="alarms_and_cameras",
-                max_length=18,
-                verbose_name="Service Type",
-            ),
-        ),
+        )
     ]

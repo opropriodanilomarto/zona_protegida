@@ -131,6 +131,7 @@ INSTALLED_APPS = [
     "auditlog",
     "zp",
     "zp.customers",
+    "zp.services",
 ]
 
 if DEBUG:

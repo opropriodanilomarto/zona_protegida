@@ -6,13 +6,13 @@ Contributions to this module:
 """
 
 from django.contrib.auth.decorators import login_required
+from django.forms import inlineformset_factory
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-
 from zp.forms import AddressForm
-
-from zp.models import Address
+from zp.services.models import Alarm, Camera
+from zp.services.forms import AlarmForm, CameraForm
 from .forms import CustomerForm
 from .models import Customer
 
@@ -39,34 +39,85 @@ def customer_detail(request: HttpRequest, slug: str) -> HttpResponse:
 
 @login_required
 def customer_create(request: HttpRequest) -> HttpResponse:
-    template_name = "zp/customers/customer_create.html"
-    form = CustomerForm(request.POST or None)
+    template_name = "zp/customers/customer_form.html"
 
-    if request.method != "POST" or not form.is_valid():
-        context = {"pg": "customers", "form": form}
+    def forms_is_valid(*args):
+        return all(args)
+
+    alarm_formset_factory = inlineformset_factory(Customer, Alarm, form=AlarmForm, extra=1, can_delete=False)
+    camera_formset_factory = inlineformset_factory(Customer, Camera, form=CameraForm, extra=1, can_delete=False)
+
+    address_form = AddressForm(request.POST or None)
+    customer_form = CustomerForm(request.POST or None)
+    alarm_formset = alarm_formset_factory(request.POST or None)
+    camera_formset = camera_formset_factory(request.POST or None)
+
+    if request.method == "GET" or not forms_is_valid(
+        address_form.is_valid(), customer_form.is_valid(), alarm_formset.is_valid(), camera_formset.is_valid()
+    ):
+        context = {
+            "pg": "customers",
+            "address_form": address_form,
+            "customer_form": customer_form,
+            "alarm_formset": alarm_formset,
+            "camera_formset": camera_formset,
+        }
         return render(request, template_name, context)
 
-    customer = form.save(commit=False)
+    address = address_form.save()
+
+    customer = customer_form.save(commit=False)
     customer.employee = request.user
-    customer.address = Address.objects.create()
+    customer.address = address
     customer.save()
+
+    alarm_formset.instance = customer
+    alarm_formset.save()
+
+    camera_formset.instance = customer
+    camera_formset.save()
 
     return redirect(customer.get_absolute_url_to_update())
 
 
 @login_required
 def customer_update(request: HttpRequest, slug: str) -> HttpResponse:
-    template_name = "zp/customers/customer_update.html"
+    template_name = "zp/customers/customer_form.html"
     customer = get_object_or_404(Customer.objects.filter(deleted=False), slug=slug)
-    form = CustomerForm(request.POST or None, instance=customer)
-    address_form = AddressForm(request.POST or None, instance=customer.address)
 
-    if request.method != "POST" or not form.is_valid() or not address_form.is_valid():
-        context = {"pg": "customers", "form": form, "address_form": address_form, "customer": customer}
+    def forms_is_valid(*args):
+        return all(args)
+
+    alarm_formset_factory = inlineformset_factory(Customer, Alarm, form=AlarmForm, extra=1, can_delete=False)
+    camera_formset_factory = inlineformset_factory(Customer, Camera, form=CameraForm, extra=1, can_delete=False)
+
+    address_form = AddressForm(request.POST or None, instance=customer.address)
+    customer_form = CustomerForm(request.POST or None, instance=customer)
+    alarm_formset = alarm_formset_factory(request.POST or None, instance=customer)
+    camera_formset = camera_formset_factory(request.POST or None, instance=customer)
+
+    if request.method == "GET" or not forms_is_valid(
+        address_form.is_valid(), customer_form.is_valid(), alarm_formset.is_valid(), camera_formset.is_valid()
+    ):
+        context = {
+            "pg": "customers",
+            "customer": customer,
+            "address_form": address_form,
+            "customer_form": customer_form,
+            "alarm_formset": alarm_formset,
+            "camera_formset": camera_formset,
+        }
         return render(request, template_name, context)
 
     address_form.save()
-    customer = form.save()
+
+    customer = customer_form.save()
+
+    alarm_formset.instance = customer
+    alarm_formset.save()
+
+    camera_formset.instance = customer
+    camera_formset.save()
 
     return redirect(customer.get_absolute_url())
 
